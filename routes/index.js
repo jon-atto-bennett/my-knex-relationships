@@ -1,4 +1,5 @@
 var express = require('express')
+var knex = require('knex')
 
 var db = require('../db')
 
@@ -19,11 +20,15 @@ function get (req, res) {
 
 function getProfile (req, res) {
   var id = req.params.id
+
   db.getUser(id)
-    .select()
+    // knex('users')
+    .join('profile', 'users.id', '=', 'profile.user_id')
+    .select('users.id', 'users.name', 'users.email', 'profile.star_sign')
     .then(function (profile) {
-    res.render('profile', {users: profile})
-  })
+      res.render('profile', {users: profile})
+    })
+
   .catch(function (err) {
     res.status(500).send('DATABASE ERROR: ' + err.message)
   })
