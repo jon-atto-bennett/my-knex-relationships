@@ -3,7 +3,8 @@ var express = require('express')
 var db = require('../db')
 
 module.exports = {
-  get: get
+  get: get,
+  getProfile: getProfile
 }
 
 function get (req, res) {
@@ -14,4 +15,16 @@ function get (req, res) {
     .catch(function (err) {
       res.status(500).send('DATABASE ERROR: ' + err.message)
     })
+}
+
+function getProfile (req, res) {
+  var id = req.params.id
+  db.getUser(id)
+    .select()
+    .then(function (profile) {
+    res.render('profile', {users: profile})
+  })
+  .catch(function (err) {
+    res.status(500).send('DATABASE ERROR: ' + err.message)
+  })
 }
