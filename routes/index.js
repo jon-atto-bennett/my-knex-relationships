@@ -41,6 +41,7 @@ function newUserForm (req, res) {
 
 function saveForm (req, res) {
   var details = req.body
+console.log(details);
   res.render('newUserForm', details)
 }
 // function saveForm (req, res) {

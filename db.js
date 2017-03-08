@@ -17,3 +17,7 @@ function getUser (id, testDb) {
   var db = testDb || connection
   return db('users').where('users.id', id)
 }
+
+function newUser(user){
+  return connection ('users')
+}
