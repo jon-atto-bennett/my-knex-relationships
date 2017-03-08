@@ -6,7 +6,7 @@ var db = require('../db')
 module.exports = {
   get: get,
   getProfile: getProfile,
-  form: form,
+  newUserForm: newUserForm,
   saveForm: saveForm
 
 }
@@ -30,17 +30,20 @@ function getProfile (req, res) {
     .then(function (profile) {
       res.render('profile', {users: profile})
     })
-
   .catch(function (err) {
     res.status(500).send('DATABASE ERROR: ' + err.message)
   })
 }
 
-function form (req, res){
-  res.render('form')
+function newUserForm (req, res) {
+  res.render('newUserForm')
 }
 
-function saveForm (req, res){
+function saveForm (req, res) {
   var details = req.body
-  res.render('form', details)
+  res.render('newUserForm', details)
 }
+// function saveForm (req, res) {
+//   res.render('newUserForm', details)
+//   .insert('users' details)
+// }
