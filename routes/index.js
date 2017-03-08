@@ -7,7 +7,8 @@ module.exports = {
   get: get,
   getProfile: getProfile,
   newUserForm: newUserForm,
-  saveForm: saveForm
+  saveForm: saveForm,
+  newUserProfile: newUserProfile
 
 }
 
@@ -41,10 +42,24 @@ function newUserForm (req, res) {
 
 function saveForm (req, res) {
   var details = req.body
-console.log(details);
   res.render('newUserForm', details)
+  var newUser = {
+    name: details.name,
+    email: details.email
+  }
+
+  var profile = {star_sign: details.star_sign}
+  db.newUser (newUser)
+  .insert(newUser).into("users").then(function (newUserID) {
+    var id = newUserID[0]
+    profile.user_id = id
+    newUserProfile(profile)
+  })
 }
-// function saveForm (req, res) {
-//   res.render('newUserForm', details)
-//   .insert('users' details)
-// }
+
+function newUserProfile(profile){
+  console.log(profile);
+  db.newUserProfile(profile)
+  .insert(profile).into("profile").then(function (newUserProfileID){
+  })
+}

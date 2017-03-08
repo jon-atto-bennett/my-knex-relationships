@@ -4,7 +4,9 @@ var connection = require('knex')(config)
 
 module.exports = {
   getUser: getUser,
-  getUsers: getUsers
+  getUsers: getUsers,
+  newUser: newUser,
+  newUserProfile: newUserProfile
 }
 
 function getUsers (testDb) {
@@ -19,5 +21,9 @@ function getUser (id, testDb) {
 }
 
 function newUser(user){
+  return connection ('users')
+}
+
+function newUserProfile(profile){
   return connection ('users')
 }
