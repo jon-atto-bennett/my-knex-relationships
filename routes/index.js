@@ -8,7 +8,7 @@ module.exports = {
   getProfile: getProfile,
   newUserForm: newUserForm,
   saveForm: saveForm,
-  newUserProfile: newUserProfile
+  // newUserProfile: newUserProfile
 
 }
 
@@ -26,8 +26,6 @@ function getProfile (req, res) {
   var id = req.params.id
 
   db.getUser(id)
-    .join('profile', 'users.id', '=', 'profile.user_id')
-    .select('users.id', 'users.name', 'users.email', 'profile.star_sign')
     .then(function (profile) {
       res.render('profile', {users: profile})
     })
@@ -42,24 +40,25 @@ function newUserForm (req, res) {
 
 function saveForm (req, res) {
   var details = req.body
+  var profile = {star_sign: details.star_sign}
   res.render('newUserForm', details)
   var newUser = {
     name: details.name,
     email: details.email
   }
-
-  var profile = {star_sign: details.star_sign}
   db.newUser (newUser)
-  .insert(newUser).into("users").then(function (newUserID) {
+  .then(function (newUserID) {
+    console.log(newUserID[0]);
     var id = newUserID[0]
     profile.user_id = id
-    newUserProfile(profile)
+    console.log(profile.user.id);
+    // newUserProfile(profile)
   })
+
+
 }
 
-function newUserProfile(profile){
-  console.log(profile);
-  db.newUserProfile(profile)
-  .insert(profile).into("profile").then(function (newUserProfileID){
-  })
-}
+// function newUserProfile(profile){
+//   db.newUserProfile(profile)
+//
+// }
