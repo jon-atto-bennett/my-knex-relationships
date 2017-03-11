@@ -4,11 +4,11 @@ var knex = require('knex')
 var db = require('../db')
 
 module.exports = {
-  get: get,
-  getProfile: getProfile,
-  newUserForm: newUserForm,
-  saveForm: saveForm,
-  // newUserProfile: newUserProfile
+  get,
+  getProfile,
+  newUserForm,
+  getFormDetails,
+  saveUserProfile
 
 }
 
@@ -24,7 +24,7 @@ function get (req, res) {
 
 function getProfile (req, res) {
   var id = req.params.id
-
+console.log(id);
   db.getUser(id)
     .then(function (profile) {
       res.render('profile', {users: profile})
@@ -38,7 +38,7 @@ function newUserForm (req, res) {
   res.render('newUserForm')
 }
 
-function saveForm (req, res) {
+function getFormDetails (req, res) {
   var details = req.body
   var profile = {star_sign: details.star_sign}
   res.render('newUserForm', details)
@@ -48,17 +48,20 @@ function saveForm (req, res) {
   }
   db.newUser (newUser)
   .then(function (newUserID) {
-    console.log(newUserID[0]);
     var id = newUserID[0]
     profile.user_id = id
-    console.log(profile.user.id);
-    // newUserProfile(profile)
+    saveUserProfile(profile)
   })
-
-
+  .catch(function (err) {
+    res.status(500).send('DATABASE ERROR: ' + err.message)
+  })
 }
 
-// function newUserProfile(profile){
-//   db.newUserProfile(profile)
-//
-// }
+function saveUserProfile(profile){
+  db.newUserProfile(profile)
+  .then(function (profile){
+  })
+  .catch(function (err) {
+    res.status(500).send('DATABASE ERROR: ' + err.message)
+  })
+}
