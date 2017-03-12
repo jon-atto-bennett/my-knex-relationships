@@ -1,5 +1,7 @@
-var express = require('express')
-var knex = require('knex')
+/*  eslint complexity: ["error", 1] */
+
+// var express = require('express')
+// var knex = require('knex')
 
 var db = require('../db')
 
@@ -8,8 +10,8 @@ module.exports = {
   getProfile,
   newUserForm,
   getFormDetails,
+  saveNewUser,
   saveUserProfile
-
 }
 
 function get (req, res) {
@@ -24,7 +26,6 @@ function get (req, res) {
 
 function getProfile (req, res) {
   var id = req.params.id
-console.log(id);
   db.getUser(id)
     .then(function (profile) {
       res.render('profile', {users: profile})
@@ -46,22 +47,20 @@ function getFormDetails (req, res) {
     name: details.name,
     email: details.email
   }
-  db.newUser (newUser)
+  saveNewUser(newUser, profile)
+}
+
+function saveNewUser (newUser, profile) {
+  db.newUser(newUser)
   .then(function (newUserID) {
     var id = newUserID[0]
     profile.user_id = id
     saveUserProfile(profile)
   })
-  .catch(function (err) {
-    res.status(500).send('DATABASE ERROR: ' + err.message)
-  })
 }
 
-function saveUserProfile(profile){
+function saveUserProfile (profile) {
   db.newUserProfile(profile)
-  .then(function (profile){
-  })
-  .catch(function (err) {
-    res.status(500).send('DATABASE ERROR: ' + err.message)
+  .then(function () {  
   })
 }
